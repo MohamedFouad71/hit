@@ -21,7 +21,9 @@ jobs:
       uses: actions/checkout@v4
     
     - name: Run valgrind memory check
-      run: ./tests/valgrind/valgrind.sh
+      run: |
+        chmod +x ./tests/valgrind/valgrind.sh
+        ./tests/valgrind/valgrind.sh
 
   unit-tests:
     name: Unit tests
@@ -31,4 +33,6 @@ jobs:
       uses: actions/checkout@v4
     
     - name: Run unit tests
-      run: ./tests/unit_tests/run-tests.sh
+      run: |
+        chmod +x ./tests/unit_tests/run-tests.sh
+        ./tests/unit_tests/run-tests.sh
