@@ -15,7 +15,7 @@ static void print_messsage();
 
 int init() {
   if (access(".hit", F_OK) == 0) {
-    printf("Repo Already Exists!\n");
+    printf("%sRepo Already Exists!\n%s", RED, RESET);
     return -1;
   }
 
@@ -29,19 +29,20 @@ int init() {
 }
 
 static void print_messsage() {
-  printf("hint: Using 'master' as the name for the initial branch. This "
-         "default branch name\n");
-  printf("hint: is subject to change. To configure the initial branch name to "
-         "use in all\n");
-  printf("hint: of your new repositories, which will suppress this warning, "
-         "call:\n");
-  printf("hint:\n");
-  printf("hint:\n");
-  printf("hint: Names commonly chosen instead of 'master' are 'main', 'trunk' "
-         "and\n");
-  printf("hint: 'development'. The just-created branch can be renamed via this "
-         "command:\n");
-  printf("hint:\n");
-  printf("hint:   hit branch -m <name>\n");
-  printf("Initialized empty hit repository in %s/.hit/\n", getcwd(NULL, 0));
+  // all the messages are in yellow color
+  printf("%s hint: Using 'master' as the name for the initial branch. This "
+         "default branch name\n%s", YELLOW, RESET);
+  printf("%s hint: is subject to change. To configure the initial branch name to "
+         "use in all\n%s", YELLOW, RESET);
+  printf("%s hint: of your new repositories, which will suppress this warning, "
+         "call:\n%s", YELLOW, RESET);
+  printf("%s hint:\n%s", YELLOW, RESET);
+  printf("%s hint:\n%s", YELLOW, RESET);
+  printf("%s hint: Names commonly chosen instead of 'master' are 'main', 'trunk' "
+         "and\n%s", YELLOW, RESET);
+  printf("%s hint: 'development'. The just-created branch can be renamed via this "
+         "command:\n%s", YELLOW, RESET);
+  printf("%s hint:\n%s", YELLOW, RESET);
+  printf("%s hint:  hit branch -m <name>\n%s", YELLOW, RESET);
+  printf("%sInitialized empty hit repository in /.hit/%s\n%s", YELLOW, getcwd(NULL, 0), RESET);
 }
