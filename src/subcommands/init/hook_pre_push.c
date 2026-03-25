@@ -1,0 +1,66 @@
+#include "hooks.h"
+#include <stdio.h>
+
+int pre_push_hook() {
+  FILE *fp = fopen(".hit/hooks/pre-push.sample", "w");
+  if (fp == NULL) {
+    printf("Error: fopen .hit/hooks/pre-push.sample\n");
+    return -1;
+  }
+  fprintf(fp, "#!/bin/sh\n"
+    "\n"
+    "# An example hook script to verify what is about to be pushed.  Called by \"git\n"
+    "# push\" after it has checked the remote status, but before anything has been\n"
+    "# pushed.  If this script exits with a non-zero status nothing will be pushed.\n"
+    "#\n"
+    "# This hook is called with the following parameters:\n"
+    "#\n"
+    "# $1 -- Name of the remote to which the push is being done\n"
+    "# $2 -- URL to which the push is being done\n"
+    "#\n"
+    "# If pushing without using a named remote those arguments will be equal.\n"
+    "#\n"
+    "# Information about the commits which are being pushed is supplied as lines to\n"
+    "# the standard input in the form:\n"
+    "#\n"
+    "#   <local ref> <local oid> <remote ref> <remote oid>\n"
+    "#\n"
+    "# This sample shows how to prevent push of commits where the log message starts\n"
+    "# with \"WIP\" (work in progress).\n"
+    "\n"
+    "remote=\"$1\"\n"
+    "url=\"$2\"\n"
+    "\n"
+    "zero=$(git hash-object --stdin </dev/null | tr '[0-9a-f]' '0')\n"
+    "\n"
+    "while read local_ref local_oid remote_ref remote_oid\n"
+    "do\n"
+    "	if test \"$local_oid\" = \"$zero\"\n"
+    "	then\n"
+    "		# Handle delete\n"
+    "		:\n"
+    "	else\n"
+    "		if test \"$remote_oid\" = \"$zero\"\n"
+    "		then\n"
+    "			# New branch, examine all commits\n"
+    "			range=\"$local_oid\"\n"
+    "		else\n"
+    "			# Update to existing branch, examine new commits\n"
+    "			range=\"$remote_oid..$local_oid\"\n"
+    "		fi\n"
+    "\n"
+    "		# Check for WIP commit\n"
+    "		commit=$(git rev-list -n 1 --grep '^WIP' \"$range\")\n"
+    "		if test -n \"$commit\"\n"
+    "		then\n"
+    "			echo >&2 \"Found WIP commit in $local_ref, not pushing\"\n"
+    "			exit 1\n"
+    "		fi\n"
+    "	fi\n"
+    "done\n"
+    "\n"
+    "exit 0\n"
+    "");
+  fclose(fp);
+  return 0;
+}
