@@ -9,7 +9,7 @@
 int main(int argc, string *argv) {
 
     if (argc < 2) {
-        printf("usage: hit <command> [<args>]\n");
+        printf("%susage: hit <command> [<args>]\n%s", YELLOW, RESET);
         exit(1);
     }
 
