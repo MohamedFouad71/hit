@@ -14,4 +14,21 @@ jobs:
       security-events: write
 
   valgrind:
-    uses: ./.github/workflows/valgrind.yaml
+    name: Valgrind memory check
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Run valgrind memory check
+      run: ./tests/valgrind/valgrind.sh
+
+  unit-tests:
+    name: Unit tests
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Run unit tests
+      run: ./tests/unit_tests/run-tests.sh
